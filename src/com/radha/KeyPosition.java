@@ -2,6 +2,7 @@ package com.radha;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class KeyPosition {
     private int key;
@@ -81,5 +82,18 @@ public class KeyPosition {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof KeyPosition){
+            if(this.key == ((KeyPosition)obj).key && this.position == ((KeyPosition)obj).position){
+                return true;
+            }
+        }
+        return false;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, position);
+    }
 }
