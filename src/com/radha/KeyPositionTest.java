@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.util.List;
+
 public class KeyPositionTest {
     @Test
     public void testGetChar() {
@@ -15,4 +17,13 @@ public class KeyPositionTest {
         assertEquals('A', actual);
     }
 
+    @Test
+    public void testGetWordsForGivenKey() {
+        KeyPosition keyPosition = new KeyPosition();
+
+        List<String> actual = keyPosition.getWordsForGivenKey(4, 5, 6);
+
+        assertEquals(27,actual.size());
+        assertEquals("GJO",actual.get(2));
+    }
 }

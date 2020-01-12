@@ -1,8 +1,9 @@
 package com.radha;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class KeyPosition {
     private int key;
@@ -51,7 +52,6 @@ public class KeyPosition {
         this.keyPositionMap.put(new KeyPosition(9, 1), 'X');
         this.keyPositionMap.put(new KeyPosition(9, 2), 'Y');
         this.keyPositionMap.put(new KeyPosition(9, 3), 'Z');
-        System.out.println("Inside populate method size="+keyPositionMap.size());
 
     }
 
@@ -70,14 +70,11 @@ public class KeyPosition {
                 Step 2: Otherwise return empty character
          */
         populateKeyPositionMap();
-        System.out.println("Inside get char method");
         KeyPosition keyOfKeyPositionMap = new KeyPosition(key, position);
         if(this.keyPositionMap.containsKey(keyOfKeyPositionMap)){
-            System.out.println("Inside if");
             return this.keyPositionMap.get(keyOfKeyPositionMap);
         }
         else{
-            System.out.println("Inside else");
             return ' ';
         }
     }
@@ -96,4 +93,62 @@ public class KeyPosition {
     public int hashCode() {
         return Objects.hash(key, position);
     }
+
+    /**
+     * Returns a List of all words from the given key combinations
+     * @param key1 a int value which represents the first key
+     * @param key2 a int value which represents the second key
+     * @param key3 a int value which represents the third key
+     * @return List<String> that contains combination of words</String>
+     */
+
+    public List<String> getWordsForGivenKey(int key1, int key2, int key3){
+        List<String> words = new ArrayList<>();
+        IntStream.range(0,3).forEach(i -> {
+            IntStream.range(0,3).forEach(j -> {
+                IntStream.range(0,3).forEach(k -> {
+                    StringBuilder sb = new StringBuilder();
+                    StringBuilder append = sb.append(getChar(key1, i)).append(getChar(key2, j)).append(getChar(key3, k));
+                    words.add(append.toString());
+                } );
+            });
+        });
+        return IntStream.range(0, 3).boxed()
+                .flatMap(i -> IntStream.range(0, 3).boxed()
+                        .flatMap(j -> IntStream.range(0, 3).boxed()
+                                .map(k -> "" + getChar(key1, i) + getChar(key2, j) + getChar(key3, k))))
+                .collect(Collectors.toList());
+       /* for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                for(int k = 0; k < 3; k++){
+                    words.add(""+getChar(key1,i)+getChar(key2,j)+getChar(key3,k));
+                }
+            }
+        }*/
+        
+    }
+
+    /*
+    Algorithm(Recursive phone words)
+     input => index, phoneNumber[]
+     Step 1: If index = length of the phone number - 1 then return getchar(phoneNumber[index],0);
+     Step 2: Otherwise return getChar(phoneNumber[index],0)+ phoneWords(index+1,phoneWords);
+     */
+
+    /*
+    Algorithm(Full Recursive of phoneWords)
+    input => index, phoneNumber[]
+    Step 0: Create a List of String called words
+    Step 1: If index = length of the phone number - 1 then
+                1.1: for each position from i = 0 to 2 do
+                        add getChar(phoneNumber[index],i) to the list
+                1.2:  return the words.
+    Step 2: Otherwise for each position from i = 0 to 2 do
+                2.1:  curChar =  getChar(phoneNumber[index],i)
+                2.2:  combinations = phoneWords(index+1,phoneNumber)
+                2.3: For each combination do
+                        2.3.1: concatenate the curCombination with curChar
+                        2.3.2: Add it to words
+                2.4: return the words
+     */
 }
